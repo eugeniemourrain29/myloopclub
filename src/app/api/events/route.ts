@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
@@ -18,11 +18,11 @@ const eventSchema = z.object({
   accountType: z.enum(["BUSINESS", "PARTICULIER"]),
 });
 
-export async function POST(req: NextRequest) {
-  const session = await auth();
-  if (!session?.user?.id) {
+export const POST = auth(async function POST(req) {
+  if (!req.auth?.user?.id) {
     return NextResponse.json({ error: "Non authentifié." }, { status: 401 });
   }
+  const userId = req.auth.user.id;
 
   try {
     const body = await req.json();
@@ -36,10 +36,7 @@ export async function POST(req: NextRequest) {
     const eventDate = new Date(data.date);
 
     if (eventDate < new Date()) {
-      return NextResponse.json(
-        { error: "La date ne peut pas être dans le passé." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "La date ne peut pas être dans le passé." }, { status: 400 });
     }
 
     const fullAddress = `${data.venueAddress}, ${data.venuePostalCode} ${data.venueCity}`;
@@ -56,7 +53,7 @@ export async function POST(req: NextRequest) {
         maxParticipants: data.maxParticipants,
         price: data.price,
         status: "UPCOMING",
-        createdById: session.user.id,
+        createdById: userId,
       },
     });
 
@@ -65,12 +62,11 @@ export async function POST(req: NextRequest) {
     console.error("[events POST] error:", err);
     return NextResponse.json({ error: "Erreur serveur." }, { status: 500 });
   }
-}
+});
 
-export async function GET(req: NextRequest) {
+export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const status = searchParams.get("status") ?? "UPCOMING";
-
   const now = new Date();
 
   await prisma.event.updateMany({
