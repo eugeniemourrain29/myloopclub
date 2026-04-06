@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { Suspense, useState, FormEvent } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
 
-export default function SignInPage() {
+function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? "/";
@@ -46,7 +46,6 @@ export default function SignInPage() {
   return (
     <div className="min-h-[calc(100vh-64px)] bg-[#fffcf5] flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-md">
-        {/* Header */}
         <div className="text-center mb-10">
           <Link href="/" className="text-3xl font-black text-[#0e59c3]">
             Trookie
@@ -57,14 +56,12 @@ export default function SignInPage() {
           </p>
         </div>
 
-        {/* Error */}
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg">
             {error}
           </div>
         )}
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-black mb-1.5">
@@ -87,10 +84,7 @@ export default function SignInPage() {
               <label htmlFor="password" className="block text-sm font-medium text-black">
                 Mot de passe
               </label>
-              <Link
-                href="/auth/forgot-password"
-                className="text-xs text-[#0e59c3] hover:underline"
-              >
+              <Link href="/auth/forgot-password" className="text-xs text-[#0e59c3] hover:underline">
                 Mot de passe oublié ?
               </Link>
             </div>
@@ -133,5 +127,13 @@ export default function SignInPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#fffcf5]" />}>
+      <SignInForm />
+    </Suspense>
   );
 }
