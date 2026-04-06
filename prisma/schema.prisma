@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountType {
+  BUSINESS
+  PARTICULIER
+}
+
+enum EventStatus {
+  UPCOMING
+  PAST
+  CANCELLED
+}
+
+model User {
+  id          String      @id @default(cuid())
+  email       String      @unique
+  password    String
+  name        String
+  accountType AccountType @default(PARTICULIER)
+  createdAt   DateTime    @default(now())
+
+  business      Business?
+  registrations Registration[]
+  eventsCreated Event[]
+  points        UserPoints?
+
+  @@map("users")
+}
+
+model Business {
+  id          String @id @default(cuid())
+  userId      String @unique
+  companyName String
+  address     String
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  friperies Friperie[]
+
+  @@map("businesses")
+}
+
+model Friperie {
+  id         String @id @default(cuid())
+  businessId String
+  name       String
+  address    String
+  lat        Float?
+  lng        Float?
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  events   Event[]
+
+  @@map("friperies")
+}
+
+model Event {
+  id              String      @id @default(cuid())
+  title           String
+  fripeirieName   String
+  address         String
+  lat             Float?
+  lng             Float?
+  date            DateTime
+  timeSlot        String
+  maxParticipants Int
+  price           Float
+  status          EventStatus @default(UPCOMING)
+  createdById     String
+  friperieId      String?
+  createdAt       DateTime    @default(now())
+
+  createdBy     User           @relation(fields: [createdById], references: [id])
+  friperie      Friperie?      @relation(fields: [friperieId], references: [id])
+  registrations Registration[]
+
+  @@map("events")
+}
+
+model Registration {
+  id        String   @id @default(cuid())
+  userId    String
+  eventId   String
+  paid      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event         Event          @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  clothingItems ClothingItem[]
+
+  @@unique([userId, eventId])
+  @@map("registrations")
+}
+
+model ClothingItem {
+  id                  String @id @default(cuid())
+  registrationId      String
+  brand               String
+  naturalFiberPercent Int
+  points              Int
+  validated           Boolean @default(false)
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@map("clothing_items")
+}
+
+model UserPoints {
+  id          String @id @default(cuid())
+  userId      String @unique
+  totalPoints Int    @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_points")
+}
