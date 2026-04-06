@@ -1,51 +1,34 @@
-import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export default auth((req) => {
-  const { nextUrl, auth: session } = req;
-  const isLoggedIn = !!session?.user;
+export function middleware(req: NextRequest) {
+  const { nextUrl } = req;
 
-  // Protected routes
-  const protectedPaths = [
-    "/dashboard",
-    "/events",
-    "/propose",
-  ];
+  // Check for session cookie (NextAuth v5 uses "authjs.session-token" or "next-auth.session-token")
+  const sessionToken =
+    req.cookies.get("authjs.session-token")?.value ||
+    req.cookies.get("next-auth.session-token")?.value ||
+    req.cookies.get("__Secure-authjs.session-token")?.value ||
+    req.cookies.get("__Secure-next-auth.session-token")?.value;
 
-  // Auth routes — redirect away if already logged in
-  const authPaths = ["/auth/signin", "/auth/signup"];
+  const isLoggedIn = !!sessionToken;
 
-  const isProtected = protectedPaths.some((path) =>
-    nextUrl.pathname.startsWith(path)
-  );
-  const isAuthPath = authPaths.some((path) =>
-    nextUrl.pathname.startsWith(path)
-  );
-
-  // Propose page: redirect to sign-in if not logged in
-  if (nextUrl.pathname.startsWith("/propose") && !isLoggedIn) {
-    return NextResponse.redirect(
-      new URL(`/auth/signin?callbackUrl=/propose`, nextUrl)
-    );
-  }
-
-  // Dashboard: require auth
+  // Protect dashboard and propose
   if (nextUrl.pathname.startsWith("/dashboard") && !isLoggedIn) {
     return NextResponse.redirect(
       new URL(`/auth/signin?callbackUrl=${nextUrl.pathname}`, nextUrl)
     );
   }
 
-  // Already logged in, trying to access auth pages
-  if (isAuthPath && isLoggedIn) {
-    return NextResponse.redirect(new URL("/", nextUrl));
+  if (nextUrl.pathname.startsWith("/propose") && !isLoggedIn) {
+    return NextResponse.redirect(
+      new URL(`/auth/signin?callbackUrl=/propose`, nextUrl)
+    );
   }
 
   return NextResponse.next();
-});
+}
 
 export const config = {
-  matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.png$).*)",
-  ],
+  matcher: ["/dashboard/:path*", "/propose"],
 };
