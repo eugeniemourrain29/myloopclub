@@ -22,12 +22,10 @@ interface MapProps {
 const PARIS_CENTER: [number, number] = [48.8566, 2.3522];
 const DEFAULT_ZOOM = 13;
 
-// Stamen Toner tile URL (black & white, fine lines)
-// Using the Stadia Maps hosted version of Stamen Toner (free with attribution)
-const STAMEN_TONER_URL =
-  "https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.png";
-const STAMEN_TONER_ATTRIBUTION =
-  '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://stamen.com">Stamen Design</a> &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+const TILE_URL =
+  "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+const TILE_ATTRIBUTION =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>';
 
 export default function Map({ events }: MapProps) {
   return (
@@ -39,8 +37,8 @@ export default function Map({ events }: MapProps) {
       className="z-0"
     >
       <TileLayer
-        url={STAMEN_TONER_URL}
-        attribution={STAMEN_TONER_ATTRIBUTION}
+        url={TILE_URL}
+        attribution={TILE_ATTRIBUTION}
         maxZoom={20}
       />
       <ZoomControl position="bottomright" />
