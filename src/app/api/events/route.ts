@@ -9,7 +9,8 @@ const businessEventSchema = z.object({
   timeSlot: z.string(),
   maxParticipants: z.number().int().min(2),
   price: z.number().min(0),
-  friperieId: z.string(),
+  venueSuggestion: z.string().min(1),
+  venueAddress: z.string().min(1),
   accountType: z.literal("BUSINESS"),
 });
 
@@ -51,32 +52,17 @@ export async function POST(req: NextRequest) {
     }
 
     if (data.accountType === "BUSINESS") {
-      const friperie = await prisma.friperie.findUnique({
-        where: { id: data.friperieId },
-        include: { business: true },
-      });
-
-      if (!friperie || friperie.business.userId !== session.user.id) {
-        return NextResponse.json(
-          { error: "Friperie introuvable ou non autorisée." },
-          { status: 403 }
-        );
-      }
-
       const event = await prisma.event.create({
         data: {
           title: data.title,
-          fripeirieName: friperie.name,
-          address: friperie.address,
-          lat: friperie.lat,
-          lng: friperie.lng,
+          fripeirieName: data.venueSuggestion,
+          address: data.venueAddress,
           date: eventDate,
           timeSlot: data.timeSlot,
           maxParticipants: data.maxParticipants,
           price: data.price,
           status: "UPCOMING",
           createdById: session.user.id,
-          friperieId: friperie.id,
         },
       });
 

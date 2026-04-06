@@ -55,27 +55,16 @@ export function ProposeEventForm({ accountType, friperies, userId }: ProposeEven
     setLoading(true);
 
     try {
-      const payload =
-        accountType === "BUSINESS"
-          ? {
-              title,
-              date,
-              timeSlot,
-              maxParticipants,
-              price,
-              friperieId: selectedFriperieId,
-              accountType,
-            }
-          : {
-              title,
-              date,
-              timeSlot,
-              maxParticipants,
-              price,
-              venueSuggestion,
-              venueAddress,
-              accountType,
-            };
+      const payload = {
+        title,
+        date,
+        timeSlot,
+        maxParticipants,
+        price,
+        venueSuggestion,
+        venueAddress,
+        accountType,
+      };
 
       const res = await fetch("/api/events", {
         method: "POST",
