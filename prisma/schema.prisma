@@ -123,3 +123,11 @@ model UserPoints {
 
   @@map("user_points")
 }
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
