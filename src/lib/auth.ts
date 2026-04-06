@@ -30,7 +30,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id as string;
-        session.user.accountType = token.accountType as string;
+        session.user.accountType = token.accountType as "BUSINESS" | "PARTICULIER";
       }
       return session;
     },
