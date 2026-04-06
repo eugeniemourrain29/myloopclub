@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { Calendar, Users, Plus, ChevronRight, CheckCircle2, Clock } from "lucide-react";
+import { Calendar, Users, Plus, ChevronRight, CheckCircle2, Clock, Pencil } from "lucide-react";
 import { formatDate, formatPrice } from "@/lib/utils";
 
 export default async function BusinessDashboardPage() {
@@ -208,12 +208,23 @@ function EventCard({
           </p>
         </div>
 
-        <Link
-          href={`/events/${event.id}`}
-          className="flex-none inline-flex items-center gap-1 text-sm text-[#0e59c3] font-medium hover:underline"
-        >
-          Voir détails <ChevronRight className="w-4 h-4" />
-        </Link>
+        <div className="flex-none flex items-center gap-3">
+          {type === "upcoming" && (
+            <Link
+              href={`/dashboard/business/events/${event.id}/edit`}
+              className="inline-flex items-center gap-1 text-sm text-black/50 hover:text-black transition-colors"
+            >
+              <Pencil className="w-3.5 h-3.5" />
+              Modifier
+            </Link>
+          )}
+          <Link
+            href={`/events/${event.id}`}
+            className="inline-flex items-center gap-1 text-sm text-[#0e59c3] font-medium hover:underline"
+          >
+            Voir détails <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
       </div>
 
       {/* Participants list */}
