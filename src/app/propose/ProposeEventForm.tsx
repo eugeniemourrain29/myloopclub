@@ -155,32 +155,34 @@ export function ProposeEventForm({ accountType, friperies, userId }: ProposeEven
 
       {/* Venue */}
       {accountType === "BUSINESS" ? (
-        <div>
-          <label className="block text-sm font-medium text-black mb-1.5">
-            Friperie
-          </label>
-          {friperies.length === 0 ? (
-            <div className="text-sm text-black/50 bg-black/5 px-4 py-3 rounded-xl">
-              Aucune friperie enregistrée.{" "}
-              <a href="/dashboard/business" className="text-[#0e59c3] underline">
-                Ajouter une friperie
-              </a>
-            </div>
-          ) : (
-            <select
+        <>
+          <div>
+            <label className="block text-sm font-medium text-black mb-1.5">
+              Nom de la friperie
+            </label>
+            <input
+              type="text"
               required
-              value={selectedFriperieId}
-              onChange={(e) => setSelectedFriperieId(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-black/15 bg-white text-black focus:outline-none focus:ring-2 focus:ring-[#0e59c3] focus:border-transparent transition text-sm"
-            >
-              {friperies.map((f) => (
-                <option key={f.id} value={f.id}>
-                  {f.name} — {f.address}
-                </option>
-              ))}
-            </select>
-          )}
-        </div>
+              value={venueSuggestion}
+              onChange={(e) => setVenueSuggestion(e.target.value)}
+              placeholder="Kilo Shop Marais"
+              className="w-full px-4 py-3 rounded-xl border border-black/15 bg-white text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-[#0e59c3] focus:border-transparent transition text-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-black mb-1.5">
+              Adresse
+            </label>
+            <input
+              type="text"
+              required
+              value={venueAddress}
+              onChange={(e) => setVenueAddress(e.target.value)}
+              placeholder="69 rue Beaubourg, 75003 Paris"
+              className="w-full px-4 py-3 rounded-xl border border-black/15 bg-white text-black placeholder-black/30 focus:outline-none focus:ring-2 focus:ring-[#0e59c3] focus:border-transparent transition text-sm"
+            />
+          </div>
+        </>
       ) : (
         <>
           <div>
@@ -278,7 +280,7 @@ export function ProposeEventForm({ accountType, friperies, userId }: ProposeEven
 
       <button
         type="submit"
-        disabled={loading || (accountType === "BUSINESS" && friperies.length === 0)}
+        disabled={loading}
         className="w-full bg-[#0e59c3] text-white font-medium py-3 rounded-xl hover:bg-[#0d4fad] transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm mt-2"
       >
         {loading && <Loader2 className="w-4 h-4 animate-spin" />}
