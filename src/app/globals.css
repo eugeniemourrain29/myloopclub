@@ -39,13 +39,14 @@
   * {
     @apply border-border;
   }
-  h1 {
-    font-family: "Lazydog", sans-serif;
-  }
   body {
     @apply bg-[#fffcf5] text-black;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+}
+
+h1 {
+  font-family: "Lazydog", sans-serif !important;
 }
 
 /* Leaflet overrides — prevent map tiles from going grey on load */
