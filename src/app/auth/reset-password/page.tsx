@@ -58,7 +58,7 @@ function ResetPasswordForm() {
     return (
       <div className="min-h-[calc(100vh-64px)] bg-[#fffcf5] flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md text-center space-y-6">
-          <Link href="/" className="text-3xl font-black text-[#0e59c3]">
+          <Link href="/" className="text-3xl font-lazydog text-[#0e59c3]">
             My Loop Club
           </Link>
           <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg">
@@ -80,7 +80,7 @@ function ResetPasswordForm() {
     <div className="min-h-[calc(100vh-64px)] bg-[#fffcf5] flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
-          <Link href="/" className="text-3xl font-black text-[#0e59c3]">
+          <Link href="/" className="text-3xl font-lazydog text-[#0e59c3]">
             My Loop Club
           </Link>
           <h1 className="mt-6 text-2xl font-bold text-black">

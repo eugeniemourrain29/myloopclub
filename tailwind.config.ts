@@ -79,6 +79,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
+        lazydog: ["Lazydog", "sans-serif"],
       },
     },
   },

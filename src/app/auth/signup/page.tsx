@@ -73,7 +73,7 @@ export default function SignUpPage() {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-10">
-          <Link href="/" className="text-3xl font-black text-[#0e59c3]">
+          <Link href="/" className="text-3xl font-lazydog text-[#0e59c3]">
             My Loop Club
           </Link>
           <h1 className="mt-6 text-2xl font-bold text-black">Crée ton compte</h1>
