@@ -50,7 +50,7 @@ function SignInForm() {
           <Link href="/" className="text-3xl font-lazydog text-[#0e59c3]">
             My Loop Club
           </Link>
-          <h1 className="mt-6 text-2xl font-bold text-black">Bon retour 👋</h1>
+          <h1 className="mt-6 text-2xl font-bold text-black" style={{fontFamily: 'var(--font-inter), sans-serif'}}>Bon retour 👋</h1>
           <p className="mt-2 text-sm text-black/50">
             Connecte-toi pour accéder à ton espace
           </p>

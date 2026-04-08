@@ -46,7 +46,7 @@
 }
 
 h1 {
-  font-family: "Lazydog", sans-serif !important;
+  font-family: "Lazydog", sans-serif;
 }
 
 /* Leaflet overrides — prevent map tiles from going grey on load */
